@@ -66,3 +66,16 @@ grep -Ec '^[^ ]+ [^ ]+ ACCEPT TCP .* 80 [0-9]+$' firewall.log
 grep -Ec '^[0-9]{4}-[0-9]{2}-[0-9]{2} 0[0-2]:' firewall.log
 #Result: 13138
 # In this task, the regex looks at the time field right after the date field. The first part `^[0-9]{4}-[0-9]{2}-[0-9]{2}` matches the date at the start of the line. The space after the date is important because the time field comes immediately after it. The part `0[0-2]:` matches only hours 00, 01, and 02 because `[0-2]` accepts only 0, 1, or 2. The colon after the hour makes sure the match is checking the hour part of the time and not another number in the line.
+
+---- Bonus
+
+#Regex:
+
+^[^[:space:]]{8,10}$
+
+#Result:
+webhost001
+webhost002
+proxy_07
+
+# The regex matches lines that have between 8 and 10 characters and no spaces. The `^` and `$` anchors make the regex check the full line. The part `[^[:space:]]` means any character except a space, and `{8,10}` sets the allowed length. That is why `webhost001`, `webhost002`, and `proxy_07` match, but `that server is broken` does not match.
