@@ -49,3 +49,12 @@ sed -E -n '/^[^#]/ s/^([^ ]+) [^ ]+ ([^ ]+) ([^ ]+) .*/\1 \2 \3/p' firewall.log 
 2018-07-24 REJECT TCP
 
 # In this task, sed changes each event line into a shorter report with only three fields: date, action, and protocol. The option `-E` allows extended regular expressions, so the groups can be written with normal parentheses. The option `-n` stops sed from printing every line automatically. The part `/^[^#]/` makes sed work only on event lines, because header lines start with `#`. In the substitution, the first group `([^ ]+)` captures the date and saves it as `\1`. The next `[^ ]+` skips the time field because it is not needed. The second group `([^ ]+)` captures the action and saves it as `\2`. The third group `([^ ]+)` captures the protocol and saves it as `\3`. The `.*` part matches the rest of the line after the protocol. The replacement `\1 \2 \3` rebuilds the line using only the captured fields. The final `p` prints the modified line, and `head -n 5` limits the result to the first five lines.
+
+---- Task 6
+
+#Command
+grep -Ec '^[^ ]+ [^ ]+ ACCEPT TCP .* 80 [0-9]+$' firewall.log
+
+#Result: 93
+
+# For this metric, the regex checks three fields in the same event line. The first two `[^ ]+` parts move through the date and time fields. After that, `ACCEPT TCP` matches the action and protocol fields exactly. The `.*` part moves through the middle fields until the destination port area. The pattern ` 80 [0-9]+$` is the important ending because it matches destination port 80 followed by the size field. The `$` anchor makes sure the last number is the final size field, so 80 is treated as the second-to-last field and not as another number somewhere else in the line.
