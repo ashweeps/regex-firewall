@@ -58,3 +58,11 @@ grep -Ec '^[^ ]+ [^ ]+ ACCEPT TCP .* 80 [0-9]+$' firewall.log
 #Result: 93
 
 # For this metric, the regex checks three fields in the same event line. The first two `[^ ]+` parts move through the date and time fields. After that, `ACCEPT TCP` matches the action and protocol fields exactly. The `.*` part moves through the middle fields until the destination port area. The pattern ` 80 [0-9]+$` is the important ending because it matches destination port 80 followed by the size field. The `$` anchor makes sure the last number is the final size field, so 80 is treated as the second-to-last field and not as another number somewhere else in the line.
+
+---- Task 7
+
+#Command:
+
+grep -Ec '^[0-9]{4}-[0-9]{2}-[0-9]{2} 0[0-2]:' firewall.log
+#Result: 13138
+# In this task, the regex looks at the time field right after the date field. The first part `^[0-9]{4}-[0-9]{2}-[0-9]{2}` matches the date at the start of the line. The space after the date is important because the time field comes immediately after it. The part `0[0-2]:` matches only hours 00, 01, and 02 because `[0-2]` accepts only 0, 1, or 2. The colon after the hour makes sure the match is checking the hour part of the time and not another number in the line.
