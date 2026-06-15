@@ -24,3 +24,11 @@ grep -Ec '^[^ ]+ [^ ]+ (DROP|REJECT) ' firewall.log
 grep -Ec '^[^ ]+ [^ ]+ [^ ]+ [^ ]+ 11\.' firewall.log
 #Result: 33217
 # The goal here is to find source IP addresses that begin with 11. The first four `[^ ]+` parts move through the date, time, action, and protocol fields. After that, the pattern reaches the source IP field. The part `11\.` matches the number 11 followed by a real dot. The dot needs `\` because a normal dot in regex means any character.
+
+---- Task 4
+
+#Command:
+
+grep -Ec ' [0-9]{7}$' firewall.log
+#Result: 2343
+# For this task, the regex checks the size field at the end of each event line. The space before `[0-9]` helps start the match at the last field. The class `[0-9]` matches digits, and `{7}` means exactly seven digits. The `$` anchor makes sure the seven digit number is at the end of the line, so the match is for the size field.
